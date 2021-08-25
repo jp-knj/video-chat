@@ -1,7 +1,10 @@
+import { useContext, useEffect } from "react";
+import { HostContext } from "../contexts/useHost"
 import Button from "../components/Button";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";;
 
 const Login = () => {
+  const { dispatch } = useContext(HostContext);
   const history = useHistory();
   const clickedToJoinRoom = () => {
     history.push("/join-room");
@@ -9,6 +12,13 @@ const Login = () => {
   const clickedToJoinRoomAsHost = () => {
     history.push("/join-room?host=true");
   };
+
+  useEffect(() => {
+      if (dispatch) {
+        dispatch({ type: "RESET_IS_HOST" })
+      }
+  }, []);
+
   return (
     <div>
       <div>
