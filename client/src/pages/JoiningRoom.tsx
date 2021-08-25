@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { HostContext } from "../contexts/useHost";
+import Button from "../components/Button";
 
 interface Props {
   value: string;
@@ -18,6 +19,8 @@ const JoiningRoom = () => {
   const search = useLocation().search;
   const { isHost, isVideo, dispatch } = useContext(HostContext);
   const [roomState, setRoomState] = useState({ roomId: "", nameValue: "" });
+  const [errorState, setErrorState] = useState<string>("");
+  const successText = isHost ? "Host" : "Join";
   const titleText = isHost ? "Host Meeting" : "Join Meeting";
 
   const handleRoomIdValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,8 +38,18 @@ const JoiningRoom = () => {
       nameValue: nameValue,
     });
   };
+
   const handleConnectTypeChange = (e: any) => {
     if (dispatch) dispatch({ type: "SET_CONNECT_ONLY_WITH_AUDIO" });
+  };
+
+  const handleJoinRoom = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("Join Room");
+  };
+
+  const history = useHistory();
+  const pushToLogin = () => {
+    history.push("/");
   };
 
   useEffect(() => {
@@ -47,6 +60,7 @@ const JoiningRoom = () => {
       }
     }
   }, []);
+
   return (
     <>
       <div>{titleText}</div>
@@ -69,6 +83,19 @@ const JoiningRoom = () => {
             {isVideo && <span onClick={handleConnectTypeChange}>yes</span>}
             {!isVideo && <span onClick={handleConnectTypeChange}>no</span>}
             <p>Only Audio</p>
+          </div>
+        </div>
+        <div>
+          {errorState && (
+            <div>
+              <p>{errorState}</p>
+            </div>
+          )}
+        </div>
+        <div>
+          <div>
+            <Button label={successText} handleClick={handleJoinRoom} />
+            <Button label="cancel" handleClick={pushToLogin} />
           </div>
         </div>
       </div>
