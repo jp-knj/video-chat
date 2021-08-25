@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
-import { HostContext } from "../contexts/useHost"
+import { HostContext } from "../contexts/useHost";
 
 interface Props {
   value: string;
@@ -16,7 +16,7 @@ const Input: React.FC<Props> = ({ value, handleChange, placeholder }) => {
 
 const JoiningRoom = () => {
   const search = useLocation().search;
-  const { isHost, dispatch } = useContext(HostContext);
+  const { isHost, isVideo, dispatch } = useContext(HostContext);
   const [roomState, setRoomState] = useState({ roomId: "", nameValue: "" });
   const titleText = isHost ? "Host Meeting" : "Join Meeting";
 
@@ -35,12 +35,15 @@ const JoiningRoom = () => {
       nameValue: nameValue,
     });
   };
+  const handleConnectTypeChange = (e: any) => {
+    if (dispatch) dispatch({ type: "SET_CONNECT_ONLY_WITH_AUDIO" });
+  };
 
   useEffect(() => {
     const isRoomHost = new URLSearchParams(search).get("host");
     if (isRoomHost) {
       if (dispatch) {
-        dispatch({ type: "SET_IS_HOST" })
+        dispatch({ type: "SET_IS_HOST" });
       }
     }
   }, []);
@@ -61,6 +64,13 @@ const JoiningRoom = () => {
           handleChange={handleNameValueChange}
           placeholder="Enter your Name"
         />
+        <div>
+          <div>
+            {isVideo && <span onClick={handleConnectTypeChange}>yes</span>}
+            {!isVideo && <span onClick={handleConnectTypeChange}>no</span>}
+            <p>Only Audio</p>
+          </div>
+        </div>
       </div>
     </>
   );
