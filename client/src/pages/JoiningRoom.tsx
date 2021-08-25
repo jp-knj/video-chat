@@ -2,29 +2,6 @@ import { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { HostContext } from "../contexts/useHost"
 
-// type State = {
-//   identity: string;
-//   isHost: boolean;
-// };
-
-// const initialState: State = {
-//   identity: "",
-//   isHost: false,
-// };
-
-// type Actions = {
-//   type: "SET_IS_HOST";
-// };
-
-// const reducer = (state: State, action: Actions) => {
-//   switch (action.type) {
-//     case "SET_IS_HOST":
-//       return { ...state, isHost: true };
-//     default:
-//       return state;
-//   }
-// };
-
 interface Props {
   value: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -40,7 +17,6 @@ const Input: React.FC<Props> = ({ value, handleChange, placeholder }) => {
 const JoiningRoom = () => {
   const search = useLocation().search;
   const { isHost, dispatch } = useContext(HostContext);
-  // const [state, dispatch] = useReducer(reducer, initialState);
   const [roomState, setRoomState] = useState({ roomId: "", nameValue: "" });
   const titleText = isHost ? "Host Meeting" : "Join Meeting";
 
