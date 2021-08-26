@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import { getRoomExists } from "../utils/api";
 import { HostContext } from "../contexts/useHost";
 import Button from "../components/Button";
 
@@ -19,7 +20,7 @@ const JoiningRoom = () => {
   const search = useLocation().search;
   const { isHost, isVideo, dispatch } = useContext(HostContext);
   const [roomState, setRoomState] = useState({ roomId: "", nameValue: "" });
-  const [errorState, setErrorState] = useState<string>("");
+  const [errorState, setErrorState] = useState("");
   const successText = isHost ? "Host" : "Join";
   const titleText = isHost ? "Host Meeting" : "Join Meeting";
 
@@ -43,10 +44,30 @@ const JoiningRoom = () => {
     if (dispatch) dispatch({ type: "SET_CONNECT_ONLY_WITH_AUDIO" });
   };
 
-  const handleJoinRoom = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("Join Room");
+  const handleJoinRoom = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if(isHost) {
+      createRoom()
+    } else {
+      joinRoom()
+    }
   };
-
+  const joinRoom = async () => {
+    const responseMessage = await getRoomExists(roomState.roomId);
+    const { roomExists, full } = responseMessage;
+    if(roomExists){
+      if(full) {
+        setErrorState("Meeting is full. Please try again later");
+      } else {
+        // Join room
+        history.push("/room")
+      }
+    } else {
+      setErrorState("Room not found. Check your meeting Id again");
+    }
+  }
+  const createRoom = () => {
+    history.push("/room")
+  }
   const history = useHistory();
   const pushToLogin = () => {
     history.push("/");
