@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { getRoomExists } from "../utils/api";
-import { HostContext } from "../contexts/useHost";
+import { HostContext, setIsHostAction  } from "../contexts/useHost";
 import Button from "../components/Button";
 
 interface Props {
@@ -18,7 +18,7 @@ const Input: React.FC<Props> = ({ value, handleChange, placeholder }) => {
 
 const JoiningRoom = () => {
   const search = useLocation().search;
-  const { isHost, isVideo, dispatch } = useContext(HostContext);
+  const { identity,isHost, isVideo, roomId,dispatch } = useContext(HostContext);
   const [roomState, setRoomState] = useState({ roomId: "", nameValue: "" });
   const [errorState, setErrorState] = useState("");
   const successText = isHost ? "Host" : "Join";
@@ -77,7 +77,7 @@ const JoiningRoom = () => {
     const isRoomHost = new URLSearchParams(search).get("host");
     if (isRoomHost) {
       if (dispatch) {
-        dispatch({ type: "SET_IS_HOST" });
+        dispatch(setIsHostAction);
       }
     }
   }, []);

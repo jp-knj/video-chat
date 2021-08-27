@@ -4,21 +4,37 @@ type State = {
   identity: string;
   isHost: boolean;
   isVideo: boolean;
+  roomId: string;
 };
 
 const initialState: State = {
   identity: "",
   isHost: false,
   isVideo: false,
+  roomId: "",
 };
 
+enum ActionKind {
+  setIsHost = 'SET_IS_HOST'
+}
+
+type Action = {
+  type: ActionKind,
+  payload: {}
+}
+
+export const setIsHostAction: Action = {
+  type: ActionKind.setIsHost,
+  payload: {}
+}
+
 type Actions = {
-  type: "SET_IS_HOST" | "RESET_IS_HOST" | "SET_CONNECT_ONLY_WITH_AUDIO";
+  type: "SET_IS_HOST" | "RESET_IS_HOST" | "SET_CONNECT_ONLY_WITH_AUDIO" | "SET_ROOM_ID" | "SET_IDENTITY";
 };
 
 const reducer = (state: State, action: Actions) => {
   switch (action.type) {
-    case "SET_IS_HOST":
+    case ActionKind.setIsHost:
       return { ...state, isHost: true };
     case "RESET_IS_HOST":
       return { ...state, isHost: false };
@@ -33,6 +49,7 @@ interface ContextType {
   identity: string;
   isHost: boolean;
   isVideo: boolean;
+  roomId: string;
   dispatch?: Dispatch<Actions>;
 }
 
