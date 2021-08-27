@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { HostContext } from "../contexts/useHost"
+import { HostContext, resetIsHostAction } from "../contexts/useHost"
 import Button from "../components/Button";
 import { useHistory } from "react-router-dom";;
 
@@ -15,7 +15,7 @@ const Login = () => {
 
   useEffect(() => {
       if (dispatch) {
-        dispatch({ type: "RESET_IS_HOST" })
+        dispatch(resetIsHostAction)
       }
   }, []);
 
