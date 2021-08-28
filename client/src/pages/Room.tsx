@@ -1,12 +1,16 @@
-import {useContext} from "react";
+import {useContext, useEffect} from "react";
 import {HostContext} from "../contexts/useHost";
+import * as webRTCHandler from '../utils/webRTCHandler'
 import Chats from "../components/Chats"
 import ParticipantsList from "../components/ParticipantsList";
 import Video from "../components/Video"
 import RoomLabel from "../components/RoomLabel";
 
 const Room = () => {
-  const { identity, roomId } = useContext(HostContext);
+    const {roomId, identity, isHost} = useContext(HostContext);
+    useEffect(() =>{
+        webRTCHandler.getLocalPreviewAndInitRoomConnection(isHost, identity, roomId)
+    },[])
   return (
       <div>
           <ParticipantsList />
