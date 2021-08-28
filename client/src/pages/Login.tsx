@@ -18,11 +18,13 @@ const Login = () => {
   }, []);
 
   return (
-    <div>
-      <div>
-        <p>Demo</p>
-        <Button label="Join a room" handleClick={clickedToJoinRoom} />
-        <Button label="Host a room" handleClick={clickedToJoinRoomAsHost} />
+    <div className={"w-full h-screen flex items-center justify-center"}>
+      <div className={"w-96 py-4 bg-white border-2 border-gray-300 rounded-xl flex flex-col items-center justify-evenly backdrop-filter"}>
+        <p className={"text-3xl text-blue-500"}>Demo</p>
+        <div className={"flex justify-between"}>
+          <Button label="Join a room" handleClick={clickedToJoinRoom} primary/>
+          <Button label="Host a room" handleClick={clickedToJoinRoomAsHost} />
+        </div>
       </div>
     </div>
   );
