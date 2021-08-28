@@ -1,3 +1,4 @@
+import * as wss from "./wss"
 const defaultConstraints = {
     audio: true,
     video: true
@@ -7,18 +8,17 @@ export const getLocalPreviewAndInitRoomConnection = (
     identity : string,
     roomId: any = null
 ) => {
-    navigator.mediaDevices.getUserMedia(defaultConstraints).then(stream => {
+    navigator.mediaDevices.getUserMedia(defaultConstraints).then((stream:MediaStream) => {
         console.log('successfuly received local stream')
-        const localStream = stream
-        showLocalVideoPreview(localStream);
-        // isRoom ? wss.createNewRoom(identity): wss.joionRoom(roomId, identity)
+        let localVideoStream = stream
+        showLocalVideoPreview(localVideoStream);
+        isHost? wss.createNewRoom(identity) : wss.joinRoom(identity, roomId)
     }).catch((err) => {
-        console.log(
-            "error occurred when trying to get an access to local stream"
-        )
+        console.log("error occurred when trying to get an access to local stream")
+        console.log(err);
     })
 }
 
-const showLocalVideoPreview = (stream :any) => {
+const showLocalVideoPreview = (stream : MediaStream) => {
     // show preview video
 }
