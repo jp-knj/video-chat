@@ -3,18 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { getRoomExists } from "../utils/api";
 import { ActionKind, HostContext, setIsHostAction, setConnectOnlyWithAudioAction, setRoomIdAction  } from "../contexts/useHost";
 import Button from "../components/Button";
-
-interface Props {
-  value: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-}
-
-const Input: React.FC<Props> = ({ value, handleChange, placeholder }) => {
-  return (
-    <input value={value} onChange={handleChange} placeholder={placeholder} />
-  );
-};
+import Input from "../components/Input"
 
 const JoiningRoom = () => {
   const search = useLocation().search;
@@ -96,10 +85,10 @@ const JoiningRoom = () => {
   }, []);
 
   return (
-    <>
-      <div>{titleText}</div>
-      <p>JoiningRoom</p>
-      <div>
+    <div className={"w-full h-screen flex items-center justify-center relative"}>
+      <div className={"w-96 bg-white border border-gray-600 py-4 flex flex-col items-start rounded-xl"} >
+      <h2 className={"text-lg ml-6 mt-3 font-bold"}>{titleText}</h2>
+      <div className={"ml-6 mt-2"}>
         {!isHost && (
           <Input
             value={roomState.roomId}
@@ -107,40 +96,36 @@ const JoiningRoom = () => {
             placeholder="Enter meeting ID"
           />
         )}
+        <div className={"mt-2"} />
         <Input
           value={roomState.identity}
           handleChange={handleNameValueChange}
           placeholder="Enter your Name"
         />
         <div>
-          {roomState && (
-              <div>
-              <div>{roomState.roomId}</div>
-            <div>{roomState.identity}</div>
-              </div>
-            )
-          }
-          <div>
+          <div className={"flex mt-2"}>
             {isVideo && <span onClick={handleConnectTypeChange}>yes</span>}
             {!isVideo && <span onClick={handleConnectTypeChange}>no</span>}
-            <p>Only Audio</p>
+            <p className={"ml-4"}>Only Audio</p>
           </div>
         </div>
         <div>
           {errorState && (
-            <div>
-              <p>{errorState}</p>
+            <div className={"mt-2"}>
+              <p className={"text-red-400"}>{errorState}</p>
             </div>
           )}
         </div>
         <div>
-          <div>
-            <Button label={successText} handleClick={handleJoinRoom} />
+          <div className={"flex mt-2"}>
+            <Button label={successText} handleClick={handleJoinRoom} primary/>
+            <div className={"ml-2"} />
             <Button label="cancel" handleClick={pushToLogin} />
           </div>
         </div>
       </div>
-    </>
+      </div>
+    </div>
   );
 };
 export default JoiningRoom;
