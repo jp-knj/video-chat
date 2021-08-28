@@ -19,10 +19,11 @@ const Login = () => {
 
   return (
     <div className={"w-full h-screen flex items-center justify-center"}>
-      <div className={"w-96 py-4 bg-white border-2 border-gray-300 rounded-xl flex flex-col items-center justify-evenly backdrop-filter"}>
+      <div className={"w-96 py-4 bg-white border-1 border-gray-600 rounded-xl flex flex-col items-center justify-evenly backdrop-filter"}>
         <p className={"text-3xl text-blue-500"}>Demo</p>
-        <div className={"flex justify-between"}>
+        <div className={"flex justify-between mt-2"}>
           <Button label="Join a room" handleClick={clickedToJoinRoom} primary/>
+          <div className={"ml-2"} />
           <Button label="Host a room" handleClick={clickedToJoinRoomAsHost} />
         </div>
       </div>
