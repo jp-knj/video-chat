@@ -30,6 +30,13 @@ const JoiningRoom = () => {
       ...roomState,
       roomId: roomId,
     });
+    const setRoomId = {
+      type: ActionKind.setRoomId,
+      payload: {
+        roomId
+      }
+    }
+    if (dispatch) dispatch(setRoomId)
   };
 
   const handleNameValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {

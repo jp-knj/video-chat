@@ -25,7 +25,8 @@ export enum ActionKind {
 type Action = {
   type: ActionKind,
   payload?: {
-    identity: string
+    identity?: string,
+    roomId?:string
   }
 }
 
@@ -57,7 +58,7 @@ const reducer = (state: State, action: Action) => {
     case ActionKind.setConnectOnlyWithAudio:
       return { ...state, isVideo: !state.isVideo };
     case ActionKind.setRoomId:
-      return { ...state, roomId: state.roomId}
+      return { ...state, roomId: action.payload?.roomId || "aaaa"}
     case ActionKind.setIdentity:
       console.log(state.identity)
       return { ...state, identity: action.payload?.identity || "ssss"}
