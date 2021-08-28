@@ -14,37 +14,54 @@ const initialState: State = {
   roomId: "",
 };
 
-enum ActionKind {
+export enum ActionKind {
   setIsHost = 'SET_IS_HOST',
   resetIsHost = 'RESET_IS_HOST',
+  setConnectOnlyWithAudio = 'SET_CONNECT_ONLY_WITH_AUDIO',
+  setRoomId = 'SET_ROOM_ID',
+  setIdentity= 'SET_IDENTITY'
 }
 
 type Action = {
   type: ActionKind,
-  payload: {}
+  payload?: {
+    identity: string
+  }
 }
 
 export const setIsHostAction: Action = {
   type: ActionKind.setIsHost,
-  payload: {}
 }
 
 export const resetIsHostAction: Action = {
   type: ActionKind.resetIsHost,
-  payload: {}
 }
-type Actions = {
-  type: "SET_IS_HOST" | "RESET_IS_HOST" | "SET_CONNECT_ONLY_WITH_AUDIO" | "SET_ROOM_ID" | "SET_IDENTITY";
-};
 
-const reducer = (state: State, action: Actions) => {
+export const setConnectOnlyWithAudioAction: Action = {
+  type: ActionKind.setConnectOnlyWithAudio,
+}
+export const setRoomIdAction: Action = {
+  type: ActionKind.setRoomId,
+}
+
+export const setIdentity: Action = {
+  type: ActionKind.setIdentity,
+}
+
+const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case ActionKind.setIsHost:
       return { ...state, isHost: true };
     case ActionKind.resetIsHost:
       return { ...state, isHost: false };
-    case "SET_CONNECT_ONLY_WITH_AUDIO":
+    case ActionKind.setConnectOnlyWithAudio:
       return { ...state, isVideo: !state.isVideo };
+    case ActionKind.setRoomId:
+      return { ...state, roomId: state.roomId}
+    case ActionKind.setIdentity:
+      console.log(state.identity)
+      return { ...state, identity: action.payload?.identity || "ssss"}
+
     default:
       return state;
   }
@@ -55,7 +72,7 @@ interface ContextType {
   isHost: boolean;
   isVideo: boolean;
   roomId: string;
-  dispatch?: Dispatch<Actions>;
+  dispatch?: Dispatch<Action>;
 }
 
 export const HostContext = createContext<ContextType>(initialState);

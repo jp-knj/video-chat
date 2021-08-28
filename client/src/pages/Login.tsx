@@ -14,9 +14,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-      if (dispatch) {
-        dispatch(resetIsHostAction)
-      }
+      if (dispatch) dispatch(resetIsHostAction)
   }, []);
 
   return (
