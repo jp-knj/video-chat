@@ -13,42 +13,18 @@ import Input from "../components/Input"
 
 const JoiningRoom = () => {
   const search = useLocation().search;
-  const { roomState, setRoomState, setHost } = useRoom();
-  // const { roomsState, setRoomsState} = useSockets();
+  const { roomState, setHost, handleRoomId, handleUsername } = useRoom();
   const { identity, isVideo, roomId,dispatch } = useContext(HostContext);
-  /// const [roomState, setRoomState] = useState({ roomId: "", identity: "" });
   const [errorState, setErrorState] = useState("");
   const successText = roomState.isHost ? "Host" : "Join";
   const titleText = roomState.isHost ? "Host Meeting" : "Join Meeting";
 
   const handleRoomIdValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const roomId = String(e.target.value);
-   //   setRoomState({
-   //    ...roomState,
-   //    roomId: roomId,
-   //  });
-   //  const setRoomId = {
-   //    type: ActionKind.setRoomId,
-   //    payload: {
-   //      roomId
-   //    }
-   //  }
-   //  if (dispatch) dispatch(setRoomId)
+    handleRoomId(e)
   };
 
   const handleNameValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const identity = String(e.target.value);
-    // setRoomState({
-    //   ...roomState,
-    //   identity: identity,
-    // });
-    // const setIdentity = {
-    //   type: ActionKind.setIdentity,
-    //   payload: {
-    //     identity
-    //   }
-    // }
-    // if (dispatch) dispatch(setIdentity)
+    handleUsername(e)
   };
 
   const handleConnectTypeChange = (e: any) => {
@@ -77,7 +53,6 @@ const JoiningRoom = () => {
     // }
   }
   const createRoom = () => {
-    if(dispatch) dispatch(setRoomIdAction)
     history.push("/room")
   }
   const history = useHistory();
@@ -97,14 +72,14 @@ const JoiningRoom = () => {
       <div className={"ml-6 mt-2"}>
         {!roomState.isHost && (
           <Input
-            value=""
+            value={roomState.roomId}
             handleChange={handleRoomIdValueChange}
             placeholder="Enter meeting ID"
           />
         )}
         <div className={"mt-2"} />
         <Input
-          value=""
+          value={roomState.username}
           handleChange={handleNameValueChange}
           placeholder="Enter your Name"
         />

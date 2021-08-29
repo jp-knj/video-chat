@@ -24,10 +24,30 @@ export const useRoom = () => {
         console.log(`Call resethost:${roomState.isHost}`)
     }
 
+    const handleRoomId = (e:React.ChangeEvent<HTMLInputElement>) => {
+        const roomId = String(e.target.value);
+        setRoomState({
+                ...roomState,
+                roomId: roomId,
+              });
+        console.log(`Call handleRoomId:${roomState.roomId}`)
+    }
+
+    const handleUsername = (e:React.ChangeEvent<HTMLInputElement>) => {
+        const username = String(e.target.value);
+        setRoomState({
+            ...roomState,
+            username: username,
+        });
+        console.log(`Call handleUsername:${roomState.username}`)
+    }
+
     return {
         roomState,
         setRoomState,
         setHost,
-        resetHost
+        resetHost,
+        handleRoomId,
+        handleUsername
     }
 }
