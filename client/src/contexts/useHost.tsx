@@ -1,4 +1,26 @@
-import { Dispatch, createContext, useReducer } from "react";
+import { Dispatch, useState, createContext, useReducer, useContext } from "react";
+import io, { Socket } from "socket.io-client";
+import { SOCKET_URL } from "../config/default";
+
+interface Context {
+  socket: Socket;
+  username?: string;
+  setUsername: Function;
+  roomId?: string;
+  roomsState: object;
+  setRoomsState: Function
+}
+
+const socket = io(SOCKET_URL);
+
+const SocketContext = createContext<Context>({
+  socket,
+  setUsername: () => false,
+  roomsState: {
+    isHost: false
+  },
+  setRoomsState : () => false,
+});
 
 type State = {
   identity: string;
@@ -96,3 +118,34 @@ export const HostContextProvider = ({
     </HostContext.Provider>
   );
 };
+export const SocketsProvider = (props: any) => {
+  const [username, setUsername] = useState("");
+  const [roomId, setRoomId] = useState("");
+  const [roomsState, setRoomsState ] = useState({
+    roomId: "",
+    isHost: false,
+    username: "",
+  });
+
+  const handleHost = () => {
+    setRoomsState({
+      ...roomsState,
+      isHost: !roomsState.isHost
+    })
+  }
+
+  return (
+      <SocketContext.Provider
+          value={{
+            socket,
+            setUsername,
+            roomsState,
+            setRoomsState,
+            roomId,
+          }}
+          {...props}
+      />
+  );
+}
+
+export const useSockets = () => useContext(SocketContext);

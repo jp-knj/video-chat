@@ -1,46 +1,54 @@
 import { useEffect, useState, useContext } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { getRoomExists } from "../utils/api";
-import { ActionKind, HostContext, setIsHostAction, setConnectOnlyWithAudioAction, setRoomIdAction  } from "../contexts/useHost";
+import { useRoom } from "../contexts/useRoom";
+import {
+  ActionKind,
+  HostContext,
+  setConnectOnlyWithAudioAction,
+  setRoomIdAction,
+  useSockets
+} from "../contexts/useHost";
 import Button from "../components/Button";
 import Input from "../components/Input"
 
 const JoiningRoom = () => {
   const search = useLocation().search;
-  const { identity,isHost, isVideo, roomId,dispatch } = useContext(HostContext);
-  const [roomState, setRoomState] = useState({ roomId: "", identity: "" });
+  const { roomState, setRoomState, setHost } = useRoom();
+  // const { roomsState, setRoomsState} = useSockets();
+  const { identity, isVideo, roomId,dispatch } = useContext(HostContext);
+  /// const [roomState, setRoomState] = useState({ roomId: "", identity: "" });
   const [errorState, setErrorState] = useState("");
-  const successText = isHost ? "Host" : "Join";
-  const titleText = isHost ? "Host Meeting" : "Join Meeting";
+  const successText = roomState.isHost ? "Host" : "Join";
+  const titleText = roomState.isHost ? "Host Meeting" : "Join Meeting";
 
   const handleRoomIdValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const roomId = String(e.target.value);
-    setRoomState({
-      ...roomState,
-      roomId: roomId,
-    });
-    const setRoomId = {
-      type: ActionKind.setRoomId,
-      payload: {
-        roomId
-      }
-    }
-    if (dispatch) dispatch(setRoomId)
+   //   setRoomState({
+   //    ...roomState,
+   //    roomId: roomId,
+   //  });
+   //  const setRoomId = {
+   //    type: ActionKind.setRoomId,
+   //    payload: {
+   //      roomId
+   //    }
+   //  }
+   //  if (dispatch) dispatch(setRoomId)
   };
 
   const handleNameValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const identity = String(e.target.value);
-    setRoomState({
-      ...roomState,
-      identity: identity,
-    });
-    const setIdentity = {
-      type: ActionKind.setIdentity,
-      payload: {
-        identity
-      }
-    }
-    if (dispatch) dispatch(setIdentity)
+    // const identity = String(e.target.value);
+    // setRoomState({
+    //   ...roomState,
+    //   identity: identity,
+    // });
+    // const setIdentity = {
+    //   type: ActionKind.setIdentity,
+    //   payload: {
+    //     identity
+    //   }
+    // }
+    // if (dispatch) dispatch(setIdentity)
   };
 
   const handleConnectTypeChange = (e: any) => {
@@ -48,25 +56,25 @@ const JoiningRoom = () => {
   };
 
   const handleJoinRoom = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if(isHost) {
+    if(roomState.isHost) {
       createRoom()
     } else {
       joinRoom()
     }
   };
   const joinRoom = async () => {
-    const responseMessage = await getRoomExists(roomState.roomId);
-    const { roomExists, full } = responseMessage;
-    if(roomExists){
-      if(full) {
-        setErrorState("Meeting is full. Please try again later");
-      } else {
-        // Join room
-        history.push("/room")
-      }
-    } else {
-      setErrorState("Room not found. Check your meeting Id again");
-    }
+    // const responseMessage = await getRoomExists(roomState.roomId);
+    // const { roomExists, full } = responseMessage;
+    // if(roomExists){
+    //   if(full) {
+    //     setErrorState("Meeting is full. Please try again later");
+    //   } else {
+    //     // Join room
+    //     history.push("/room")
+    //   }
+    // } else {
+    //   setErrorState("Room not found. Check your meeting Id again");
+    // }
   }
   const createRoom = () => {
     if(dispatch) dispatch(setRoomIdAction)
@@ -78,10 +86,8 @@ const JoiningRoom = () => {
   };
 
   useEffect(() => {
-    const isRoomHost = new URLSearchParams(search).get("host");
-    if (isRoomHost) {
-      if (dispatch) dispatch(setIsHostAction);
-    }
+    const isHost = new URLSearchParams(search).get("host");
+    if (isHost) setHost()
   }, []);
 
   return (
@@ -89,16 +95,16 @@ const JoiningRoom = () => {
       <div className={"w-96 bg-white border border-gray-600 py-4 flex flex-col items-start rounded-xl"} >
       <h2 className={"text-lg ml-6 mt-3 font-bold"}>{titleText}</h2>
       <div className={"ml-6 mt-2"}>
-        {!isHost && (
+        {!roomState.isHost && (
           <Input
-            value={roomState.roomId}
+            value=""
             handleChange={handleRoomIdValueChange}
             placeholder="Enter meeting ID"
           />
         )}
         <div className={"mt-2"} />
         <Input
-          value={roomState.identity}
+          value=""
           handleChange={handleNameValueChange}
           placeholder="Enter your Name"
         />

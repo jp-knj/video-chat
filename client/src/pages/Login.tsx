@@ -1,10 +1,10 @@
-import { useContext, useEffect } from "react";
-import { HostContext, resetIsHostAction } from "../contexts/useHost"
+import { useEffect } from "react";
 import Button from "../components/Button";
-import { useHistory } from "react-router-dom";;
+import { useHistory } from "react-router-dom";
+import {useRoom} from "../contexts/useRoom";
 
 const Login = () => {
-  const { dispatch } = useContext(HostContext);
+  const { resetHost } = useRoom()
   const history = useHistory();
   const clickedToJoinRoom = () => {
     history.push("/join-room");
@@ -14,7 +14,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-      if (dispatch) dispatch(resetIsHostAction)
+    resetHost()
   }, []);
 
   return (

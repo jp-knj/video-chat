@@ -12,7 +12,7 @@ export const getLocalPreviewAndInitRoomConnection = (
         console.log('successfuly received local stream')
         let localVideoStream = stream
         showLocalVideoPreview(localVideoStream);
-        isHost? wss.createNewRoom(identity) : wss.joinRoom(identity, roomId)
+         isHost? wss.createNewRoom(identity) : wss.joinRoom(identity, roomId)
     }).catch((err) => {
         console.log("error occurred when trying to get an access to local stream")
         console.log(err);
