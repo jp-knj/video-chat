@@ -1,11 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useRoom } from "../contexts/useRoom";
+import EVENTS from "../config/events";
 import {
-  ActionKind,
-  HostContext,
-  setConnectOnlyWithAudioAction,
-  setRoomIdAction,
   useSockets
 } from "../contexts/useHost";
 import Button from "../components/Button";
@@ -13,8 +10,8 @@ import Input from "../components/Input"
 
 const JoiningRoom = () => {
   const search = useLocation().search;
+  const { socket } = useSockets()
   const { roomState, setHost, handleRoomId, handleUsername } = useRoom();
-  const { identity, isVideo, roomId,dispatch } = useContext(HostContext);
   const [errorState, setErrorState] = useState("");
   const successText = roomState.isHost ? "Host" : "Join";
   const titleText = roomState.isHost ? "Host Meeting" : "Join Meeting";
@@ -28,7 +25,7 @@ const JoiningRoom = () => {
   };
 
   const handleConnectTypeChange = (e: any) => {
-    if (dispatch) dispatch(setConnectOnlyWithAudioAction);
+  //   if (dispatch) dispatch(setConnectOnlyWithAudioAction);
   };
 
   const handleJoinRoom = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -53,6 +50,8 @@ const JoiningRoom = () => {
     // }
   }
   const createRoom = () => {
+    console.log(`Call : createRoom: ${(roomState)}`)
+    socket.emit(EVENTS.CLIENT.CREATE_ROOM, {roomState});
     history.push("/room")
   }
   const history = useHistory();
@@ -85,8 +84,8 @@ const JoiningRoom = () => {
         />
         <div>
           <div className={"flex mt-2"}>
-            {isVideo && <span onClick={handleConnectTypeChange}>yes</span>}
-            {!isVideo && <span onClick={handleConnectTypeChange}>no</span>}
+            <span onClick={handleConnectTypeChange}>yes</span>
+            <span onClick={handleConnectTypeChange}>no</span>
             <p className={"ml-4"}>Only Audio</p>
           </div>
         </div>

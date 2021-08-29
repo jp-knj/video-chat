@@ -1,12 +1,26 @@
 import {useState} from "react";
+import { useSockets} from "./useHost";
 
+interface roomProps {
+    roomId: string,
+    isHost: boolean,
+    username: string
+}
 export const useRoom = () => {
-    const [roomState, setRoomState ] = useState({
+    const { socket } = useSockets();
+
+    const [roomState, setRoomState ] = useState<roomProps>({
         roomId: "",
         isHost: false,
         username: "",
     });
 
+    const updateRoomState = (roomId: string) => {
+        setRoomState({
+            ...roomState,
+            roomId: roomId
+        })
+    }
     const setHost = () => {
         roomState.isHost = true
         setRoomState({
@@ -27,9 +41,9 @@ export const useRoom = () => {
     const handleRoomId = (e:React.ChangeEvent<HTMLInputElement>) => {
         const roomId = String(e.target.value);
         setRoomState({
-                ...roomState,
-                roomId: roomId,
-              });
+            ...roomState,
+            roomId
+        });
         console.log(`Call handleRoomId:${roomState.roomId}`)
     }
 
@@ -45,6 +59,7 @@ export const useRoom = () => {
     return {
         roomState,
         setRoomState,
+        updateRoomState,
         setHost,
         resetHost,
         handleRoomId,

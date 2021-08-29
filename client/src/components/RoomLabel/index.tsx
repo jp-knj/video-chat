@@ -3,9 +3,11 @@ interface Props {
 }
 const RoomLabel: React.FC<Props> = ({roomId}) => {
     return (
-        <label>rooomlabel
-            <span>ID : {roomId}</span>
-        </label>
+        <div>roomlabel
+            <p>
+                ID : {roomId}
+            </p>
+        </div>
     )
 }
 export default  RoomLabel
