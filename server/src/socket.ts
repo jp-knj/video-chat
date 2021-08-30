@@ -1,13 +1,16 @@
 import { v4 as uuidv4 } from "uuid";
 import { Server, Socket } from "socket.io";
+
 const EVENTS = {
     connection: "connection",
     CLIENT: {
         CREATE_ROOM: "CREATE_ROOM",
+        JOIN_ROOM: "JOIN_ROOM",
         SEND_USERNAME: "SEND_USERNAME"
     },
     SERVER: {
-        SEND_ROOM_ID: "SEND_ROOM_ID"
+        SEND_ROOM_ID: "SEND_ROOM_ID",
+        SEND_ALL_USERS: "SEND_ALL_USERS"
     },
 };
 
@@ -37,8 +40,15 @@ function socket({ io }: { io: Server }) {
             }
             socket.join(roomId)
             rooms = [...rooms, newRoom]
-            console.log(`RoomId :${roomId} , username: ${username}`)
             socket.emit(EVENTS.SERVER.SEND_ROOM_ID, { roomId });
+            socket.emit(EVENTS.SERVER.SEND_ALL_USERS, { connectedUsers: newRoom.connectedUsers });
+        })
+        /*
+        * When a user join the room
+        */
+        socket.on(EVENTS.CLIENT.JOIN_ROOM, ({roomState}) => {
+            console.log(`Call : Join Room ${JSON.stringify(roomState)}`)
+
         })
     })
     const createNewRoomHandler = (data: any, socket:Socket) => {

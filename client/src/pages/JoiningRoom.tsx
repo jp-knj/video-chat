@@ -35,19 +35,10 @@ const JoiningRoom = () => {
       joinRoom()
     }
   };
-  const joinRoom = async () => {
-    // const responseMessage = await getRoomExists(roomState.roomId);
-    // const { roomExists, full } = responseMessage;
-    // if(roomExists){
-    //   if(full) {
-    //     setErrorState("Meeting is full. Please try again later");
-    //   } else {
-    //     // Join room
-    //     history.push("/room")
-    //   }
-    // } else {
-    //   setErrorState("Room not found. Check your meeting Id again");
-    // }
+  const joinRoom = () => {
+    console.log(`Call : joinRoom: ${JSON.stringify(roomState)}`)
+    socket.emit(EVENTS.CLIENT.JOIN_ROOM, {roomState});
+    history.push("/room")
   }
   const createRoom = () => {
     console.log(`Call : createRoom: ${(roomState)}`)
