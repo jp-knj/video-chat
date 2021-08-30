@@ -5,7 +5,8 @@ import RoomLabel from "../components/RoomLabel";
 import {useSockets} from "../contexts/useHost";
 
 const Room = () => {
-    const { roomId } = useSockets()
+    const { roomId, paticipants} = useSockets()
+    console.log(`Get: ${paticipants}`);
   return (
       <div>
           <ParticipantsList />

@@ -1,24 +1,21 @@
-const participants = [
+import {useSockets} from "../../contexts/useHost";
+
+const dammyparticipants = [
 {
-    identity: "kenji"
+    username: "kenji"
 },
 {
-    identity: "kenta"
+    username: "kenta"
 },
 {
-    identity: "kenzou"
+    username: "kenzou"
 },
 ]
-interface Props {
-    identity: string;
-    lastItem: boolean;
-    participant:object
-}
-const List:React.FC<Props> = ( {identity, lastItem, participant}) => {
-    return (
-        <>
-            <p>{identity}</p>
-            {!lastItem && <span></span>}
+const List = (props:any) => {
+    console.log(`List : ${JSON.stringify(props)}`);
+return (
+    <>
+            <p>{props.username.username}</p>
         </>
     )
 }
@@ -31,20 +28,19 @@ const Label = () => {
     )
 }
 const Lists = () => {
+    const {paticipants} = useSockets();
+    console.log(`Lists : ${JSON.stringify(paticipants)}`);
     return (
-        <div>
-            {participants.map((participant, index) => {
+        <>
+            {paticipants.map((key,index)=> {
                 return (
-                    <List
-                identity={participant.identity}
-                lastItem={participants.length === index +1}
-                participant={participant}
-                />
+                    <List username={key}/>
                 );
             })}
-        </div>
+        </>
     )
 }
+
 const ParticipantsList = () => {
     return (<div>
         <Label />
