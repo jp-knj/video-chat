@@ -10,7 +10,8 @@ const EVENTS = {
     },
     SERVER: {
         SEND_ROOM_ID: "SEND_ROOM_ID",
-        SEND_ALL_USERS: "SEND_ALL_USERS"
+        SEND_ALL_USERS: "SEND_ALL_USERS",
+        JOIN_NEW_USER: "JOIN_NEW_USER"
     },
 };
 
@@ -48,7 +49,22 @@ function socket({ io }: { io: Server }) {
         */
         socket.on(EVENTS.CLIENT.JOIN_ROOM, ({roomState}) => {
             console.log(`Call : Join Room ${JSON.stringify(roomState)}`)
+            const { username, roomId } = roomState;
 
+            const newUser = {
+                username,
+                id: uuidv4(),
+                socketId: socket.id,
+                roomId
+            }
+
+            const room = rooms.find((room :any) => room.id === roomId);
+            room.connectedUsers = [...room.connectedUsers, newUser];
+            socket.join(roomId)
+
+            connectedUsers = [...connectedUsers, newUser];
+
+            io.to(roomId).emit(EVENTS.SERVER.SEND_ALL_USERS, { connectedUsers: room.connectedUsers});
         })
     })
     const createNewRoomHandler = (data: any, socket:Socket) => {
